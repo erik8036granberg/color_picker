@@ -1,9 +1,9 @@
 "use strickt";
 
-
 let newImage = new Image();
 let imageCanvas = document.querySelector("#imageCanvas");
 let ctx = imageCanvas.getContext("2d");
+let zoomCxt = zoomCanvas.getContext("2d");
 let imageData;
 let x;
 let y;
@@ -24,24 +24,28 @@ function crateAndLoadImage() {
 
     // when image is loaded
     newImage.addEventListener("load", drawImage);
-    myImageData();
-}
-
-function myImageData() {
-    imageData = ctx.getImageData(x, y, 500, 600);
-    console.log(imageData);
 }
 
 function drawImage() {
     // draw image in canvas
     ctx.drawImage(newImage, 0, 0);
+    myImageData();
 }
 
-// get position eventlistner
+function myImageData() {
+
+    // get pixel data from image
+    imageData = ctx.getImageData(0, 0, 500, 600);
+    console.log(imageData);
+}
+
+// get mouse position on every move on the canvas
 imageCanvas.addEventListener("mousemove", getPosition, false);
 
-// get position
+
 function getPosition(event) {
+
+    // get mouse position
     x = event.x;
     y = event.y;
 
@@ -50,14 +54,19 @@ function getPosition(event) {
 
     console.log("x:" + x + " y:" + y);
     drawRectangle();
+
+    // put image data in ctx
+    ctx.putImageData(imageData, 0, 0);
+
+    drawRectangle();
 }
 
 function drawRectangle() {
-    x = x - 5;
-    y = y - 5;
-    ctx.strokeRect(x, y, 10, 10);
-}
 
+    // draw rectangle with 5 px offset for centering
+    ctx.strokeRect(x - 5, y - 5, 10, 10);
+    ctx.moveTo = (x, y);
+}
 
 
 // 🎁 Here you go! 🎁
