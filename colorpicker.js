@@ -46,8 +46,43 @@ function createZoomData() {
     console.log(zoomData);
 }
 
+function copyPixel(startX, startY) {
+    console.log("copyPixel");
+
+
+    // loop for x and y in coordinates i zoomCtx (10x10px)
+    for (let y = 0; y < 10; y++) {
+        for (let x = 0; x < 10; x++) {
+
+            // xxx
+            let zoomIndex = (x + y * 10) * 4;
+
+            // get mouse positon x & Y - and use for-loop (x & y) to set "grid"
+            let imageX = startX + x;
+            let imageY = startY + y;
+
+            // calculate imageIndex 
+            imageIndex = (imageX + imageY * imageWidth) * 4;
+
+            // copy each pixel data from imageData to zoomData
+            zoomData.data[zoomIndex + 0] = imageData.data[imageIndex + 0];
+            zoomData.data[zoomIndex + 1] = imageData.data[imageIndex + 1];
+            zoomData.data[zoomIndex + 2] = imageData.data[imageIndex + 2];
+            zoomData.data[zoomIndex + 3] = imageData.data[imageIndex + 3];
+
+            // fill with red test
+            //  zoomData.data[pixelIndex + 0] = 255; //r
+            //  zoomData.data[pixelIndex + 1] = 0; //g
+            //  zoomData.data[pixelIndex + 2] = 0; //b
+            //  zoomData.data[pixelIndex + 3] = 255; //a
+        }
+        drawZoomData();
+    }
+
+}
+
 function drawZoomData() {
-    // draw the zoomData to the zoom canvas
+    // draw the zoomData to the zoom canvas (zoomCtx)
     zoomCtx.putImageData(zoomData, 0, 0);
 }
 
@@ -93,8 +128,7 @@ function getPosition(event) {
     ctx.putImageData(imageData, 0, 0);
 
     drawRectangle(x, y);
-    drawZoomData();
-    // copyPixel();
+    copyPixel(x, y);
 }
 
 function drawRectangle(x, y) {
