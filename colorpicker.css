@@ -1,5 +1,6 @@
 #imageCanvas {
     border: 2px solid black;
+    cursor: none;
 }
 
 #sidebyside {
