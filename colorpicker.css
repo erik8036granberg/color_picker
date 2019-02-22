@@ -1,6 +1,5 @@
 #imageCanvas {
     border: 2px solid black;
-    cursor: crosshair;
 }
 
 #sidebyside {
@@ -42,7 +41,3 @@
     margin-top: 4px;
     text-transform: uppercase;
 }
-
-/* img {
-    display: none;
-} */
