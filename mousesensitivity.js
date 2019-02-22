@@ -59,6 +59,7 @@ function getPosition(event) {
     ctx.putImageData(imageData, 0, 0);
 
     drawRectangle(x, y);
+    calculateRatios(x, y);
 }
 
 function drawRectangle(x, y) {
@@ -67,4 +68,12 @@ function drawRectangle(x, y) {
     ctx.strokeRect(x - 5, y - 5, 10, 10);
     ctx.strokeStyle = "green";
     ctx.moveTo = (x, y);
+    return;
+}
+
+function calculateRatios(x, y) {
+    let ratioX = (x / imageWidth);
+    let ratioY = (y / imageHeight);
+    console.log(ratioX);
+    console.log(ratioY);
 }
