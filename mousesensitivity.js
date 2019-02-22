@@ -72,8 +72,15 @@ function drawRectangle(x, y) {
 }
 
 function calculateRatios(x, y) {
-    let ratioX = (x / imageWidth);
-    let ratioY = (y / imageHeight);
-    console.log(ratioX);
-    console.log(ratioY);
+
+    // 0 to 1 ratio
+    // let posX = (x / imageWidth);
+    // let posY = (y / imageHeight);
+
+    // -1 to 1 ratio (x / imageWidth * range - center )
+    let posX = (x / imageWidth * 2 - 1);
+    let posY = (y / imageHeight * 2 - 1);
+
+    console.log(`posX: ${posX}`);
+    console.log(`posY: ${posY}`);
 }
