@@ -1,4 +1,4 @@
-"use strickt";
+"use strict";
 
 const newImage = new Image();
 const imageCanvas = document.querySelector("#imageCanvas");
