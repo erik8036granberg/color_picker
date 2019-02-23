@@ -1,7 +1,24 @@
-#imageCanvas {
-    border: 2px solid black;
-    /* cursor: none; */
+.container {
+    position: relative;
 }
+
+#imageCanvas,
+#outputCanvas {
+    position: absolute;
+    z-index: 500;
+    top: 0;
+    left: 0;
+}
+
+#outputCanvas {
+    z-index: 999;
+    pointer-events: none;
+}
+
+#mapCanvas {
+    display: none;
+}
+
 
 #x_ratio,
 #Y_ratio {

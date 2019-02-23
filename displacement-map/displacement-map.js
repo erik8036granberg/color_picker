@@ -67,7 +67,7 @@ function getPosition(event) {
   console.log("getPosition");
 
   // clear canvas - clearRect + canvas size
-  ctx.clearRect(0, 0, imageWidth, imageHeight);
+  // ctx.clearRect(0, 0, imageWidth, imageHeight);
 
   // get mouse position
   let x = event.x;
@@ -77,7 +77,6 @@ function getPosition(event) {
 
   // put image data in ctx
   ctx.putImageData(imageData, 0, 0);
-  copyPixel(x, y);
   calculateRatios(x, y);
 }
 
@@ -89,51 +88,39 @@ function calculateRatios(x, y) {
   document.querySelector("#pos_x_ratio").textContent = mouseXratio;
   document.querySelector("#pos_y_ratio").textContent = mouseYratio;
 
-  drawRectangle(x, y, mouseXratio, mouseYratio);
+  // drawRectangle(x, y, mouseXratio, mouseYratio);
+  copyPixel(x, y, mouseXratio, mouseYratio);
 }
 
-function drawRectangle(x, y, mouseXratio, mouseYratio) {
-  console.log("drawRectangle");
-
-  // displacementX/Y
-  const MAX_MOVEMENT = 20; // max movement i px
-  const displacementX = MAX_MOVEMENT * mouseXratio;
-  const displacementY = MAX_MOVEMENT * mouseYratio;
-
-  //   Rectangle size
-  const rectWidth = imageWidth - MAX_MOVEMENT;
-  const rectHeight = imageHeight - MAX_MOVEMENT;
-
-  console.log(MAX_MOVEMENT);
-  console.log(`disX: ${displacementX}`);
-  console.log(`disY: ${displacementY}`);
-
-  //   draw Rectangle with displacementX/Y "offset" + half of MAX_MOVEMENT
-  ctx.strokeRect(
-    displacementX + MAX_MOVEMENT / 2,
-    displacementY + MAX_MOVEMENT / 2,
-    rectWidth,
-    rectHeight
-  );
-
-  ctx.strokeStyle = "green";
-  ctx.moveTo = (x, y);
-}
-
-function copyPixel(startX, startY) {
+function copyPixel(x, y, mouseXratio, mouseYratio) {
   console.log("copyPixel");
 
   // loop for x and y content i output Canvas
   for (let y = 0; y < imageHeight; y++) {
     for (let x = 0; x < imageWidth; x++) {
+      // displacementX/Y
+      const MAX_MOVEMENT = 10; // max movement i px
+      const displacementX = MAX_MOVEMENT * mouseXratio;
+      const displacementY = MAX_MOVEMENT * mouseYratio;
+
       // calculate pixelIndex position (loop x & y)
       const pixelIndex = (x + y * imageWidth) * 4;
 
+      // color to a greyscale value
+      const greyvalue = mapData.data[pixelIndex] / 255;
+
+      // Calculate the offsetX and offsetY
+      const offsetX = Math.round(x + displacementX * greyvalue);
+      const offsetY = Math.round(y + displacementY * greyvalue);
+
+      // Calculate the index of the pixel at this offset
+      const originalPixelIndex = (offsetY * imageWidth + offsetX) * 4;
+
       // copy each pixel (4 colors) data from imageData to zoomData
-      outputData.data[pixelIndex + 0] = imageData.data[pixelIndex + 0];
-      outputData.data[pixelIndex + 1] = imageData.data[pixelIndex + 1];
-      outputData.data[pixelIndex + 2] = imageData.data[pixelIndex + 2];
-      outputData.data[pixelIndex + 3] = imageData.data[pixelIndex + 3];
+      outputData.data[pixelIndex + 0] = imageData.data[originalPixelIndex + 0];
+      outputData.data[pixelIndex + 1] = imageData.data[originalPixelIndex + 1];
+      outputData.data[pixelIndex + 2] = imageData.data[originalPixelIndex + 2];
+      outputData.data[pixelIndex + 3] = imageData.data[originalPixelIndex + 3];
     }
     drawOutputData();
   }
