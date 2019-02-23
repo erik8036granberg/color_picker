@@ -1,0 +1,9 @@
+#imageCanvas {
+    border: 2px solid black;
+    /* cursor: none; */
+}
+
+#x_ratio,
+#Y_ratio {
+    margin: 2rem 0 2rem 0;
+}
