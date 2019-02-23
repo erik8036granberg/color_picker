@@ -7,9 +7,6 @@ const imageWidth = ctx.canvas.width;
 const imageHeight = ctx.canvas.height;
 let imageData;
 
-let mouseXratio;
-let mouseYratio;
-
 window.addEventListener("DOMContentLoaded", init);
 
 function init() {
@@ -23,7 +20,6 @@ function crateAndLoadImage() {
 
   // image path
   newImage.src = "cat.jpg";
-
   // when image is loaded
   newImage.addEventListener("load", drawImage);
 }
@@ -57,8 +53,6 @@ function getPosition(event) {
   x -= imageCanvas.offsetLeft;
   y -= imageCanvas.offsetTop;
 
-  console.log("x:" + x + " y:" + y);
-
   // put image data in ctx
   ctx.putImageData(imageData, 0, 0);
 
@@ -71,30 +65,32 @@ function calculateRatios(x, y) {
   // let posY = (y / imageHeight);
 
   // -1 to 1 ratio (x / imageWidth * range - center )
-  mouseXratio = (x / imageWidth) * 2 - 1;
-  mouseYratio = (y / imageHeight) * 2 - 1;
+  const mouseXratio = (x / imageWidth) * 2 - 1;
+  const mouseYratio = (y / imageHeight) * 2 - 1;
 
   document.querySelector("#pos_x_ratio").textContent = mouseXratio;
   document.querySelector("#pos_y_ratio").textContent = mouseYratio;
 
-  drawRectangle(x, y);
+  drawRectangle(x, y, mouseXratio, mouseYratio);
 }
 
-function drawRectangle(x, y) {
+function drawRectangle(x, y, mouseXratio, mouseYratio) {
   console.log("drawRectangle");
 
+  // displacementX/Y
   const MAX_MOVEMENT = 20; // max movement i px
-  let displacementX = MAX_MOVEMENT * mouseXratio;
-  let displacementY = MAX_MOVEMENT * mouseYratio;
+  const displacementX = MAX_MOVEMENT * mouseXratio;
+  const displacementY = MAX_MOVEMENT * mouseYratio;
 
-  let rectWidth = imageWidth - MAX_MOVEMENT;
-  let rectHeight = imageHeight - MAX_MOVEMENT;
+  //   Rectangle size
+  const rectWidth = imageWidth - MAX_MOVEMENT;
+  const rectHeight = imageHeight - MAX_MOVEMENT;
 
   console.log(MAX_MOVEMENT);
   console.log(`disX: ${displacementX}`);
   console.log(`disY: ${displacementY}`);
 
-  //   draw Rectangle with displacement + half of MAX_MOVEMENT
+  //   draw Rectangle with displacementX/Y "offset" + half of MAX_MOVEMENT
   ctx.strokeRect(
     displacementX + MAX_MOVEMENT / 2,
     displacementY + MAX_MOVEMENT / 2,
@@ -104,7 +100,4 @@ function drawRectangle(x, y) {
 
   ctx.strokeStyle = "green";
   ctx.moveTo = (x, y);
-
-  if (mouseXratio >= 0 && mouseYratio >= 0) {
-  }
 }
