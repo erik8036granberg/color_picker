@@ -23,15 +23,11 @@ function init() {
 }
 
 function loadImages() {
-  console.log("loadImages");
+  console.log("loadImages + sizecheck");
 
-  // image path for original image
   newImage.src = "cat.jpg";
-
-  // image path for map image
   mapImage.src = "map.jpg";
 
-  // check if the image sizes are the same
   if (
     newImage.naturalWidth !== mapImage.naturalWidth ||
     newImage.naturalHeight !== mapImage.naturalHeight
@@ -87,13 +83,6 @@ function calculateRatios(x, y) {
 
   document.querySelector("#pos_x_ratio").textContent = mouseXratio;
   document.querySelector("#pos_y_ratio").textContent = mouseYratio;
-
-  // drawRectangle(x, y, mouseXratio, mouseYratio);
-  copyPixel(x, y, mouseXratio, mouseYratio);
-}
-
-function copyPixel(x, y, mouseXratio, mouseYratio) {
-  console.log("copyPixel");
 
   // loop for x and y content i output Canvas
   for (let y = 0; y < imageHeight; y++) {
