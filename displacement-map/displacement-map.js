@@ -25,8 +25,8 @@ function init() {
 function loadImages() {
   console.log("loadImages + sizecheck");
 
-  newImage.src = "cat.jpg";
-  mapImage.src = "map.jpg";
+  newImage.src = "pixi.jpg";
+  mapImage.src = "pixi_map.jpg";
 
   if (
     newImage.naturalWidth !== mapImage.naturalWidth ||
@@ -34,7 +34,7 @@ function loadImages() {
   ) {
     alert("WTF! - The images have different sizes??");
   }
-  newImage.addEventListener("load", function() {
+  newImage.addEventListener("load", function () {
     mapImage.addEventListener("load", drawImages);
   });
 }
@@ -42,28 +42,25 @@ function loadImages() {
 function drawImages() {
   console.log("drawImages");
 
-  // draw original image in canvas
+  // draw images
   ctx.drawImage(newImage, 0, 0);
-
-  // draw map image in canvas
   mapCtx.drawImage(mapImage, 0, 0);
 
-  // save pixel data from image
+  // save data
   imageData = ctx.getImageData(0, 0, imageWidth, imageHeight);
   mapData = mapCtx.getImageData(0, 0, imageWidth, imageHeight);
+  outputData = outputCtx.createImageData(imageWidth, imageHeight);
 
-  // create an empty imageData for the output canvas
-  outputData = outputCtx.createImageData(500, 600);
+  clientInput();
 }
 
-// get mouse position on every move on the canvas
-imageCanvas.addEventListener("mousemove", getPosition, false);
+function clientInput() {
+  // get mouse position on canvas
+  imageCanvas.addEventListener("mousemove", mouseMove, false);
+}
 
-function getPosition(event) {
-  console.log("getPosition");
-
-  // clear canvas - clearRect + canvas size
-  // ctx.clearRect(0, 0, imageWidth, imageHeight);
+function mouseMove(event) {
+  console.log("mouseMove");
 
   // get mouse position
   let x = event.x;
@@ -71,26 +68,26 @@ function getPosition(event) {
   x -= imageCanvas.offsetLeft;
   y -= imageCanvas.offsetTop;
 
-  // put image data in ctx
-  ctx.putImageData(imageData, 0, 0);
-  calculateRatios(x, y);
+  displacementMap(x, y);
+  outputImage();
 }
 
-function calculateRatios(x, y) {
+function displacementMap(x, y) {
+  console.log("displacementMap");
   // -1 to 1 ratio (x / imageWidth * range - center )
   const mouseXratio = (x / imageWidth) * 2 - 1;
   const mouseYratio = (y / imageHeight) * 2 - 1;
 
-  document.querySelector("#pos_x_ratio").textContent = mouseXratio;
-  document.querySelector("#pos_y_ratio").textContent = mouseYratio;
+  // document.querySelector("#pos_x_ratio").textContent = mouseXratio;
+  // document.querySelector("#pos_y_ratio").textContent = mouseYratio;
 
   // loop for x and y content i output Canvas
   for (let y = 0; y < imageHeight; y++) {
     for (let x = 0; x < imageWidth; x++) {
       // displacementX/Y
       const MAX_MOVEMENT = 10; // max movement i px
-      const displacementX = MAX_MOVEMENT * mouseXratio;
-      const displacementY = MAX_MOVEMENT * mouseYratio;
+      const displacementX = MAX_MOVEMENT * mouseXratio / 2;
+      const displacementY = MAX_MOVEMENT * mouseYratio / 2;
 
       // calculate pixelIndex position (loop x & y)
       const pixelIndex = (x + y * imageWidth) * 4;
@@ -111,17 +108,12 @@ function calculateRatios(x, y) {
       outputData.data[pixelIndex + 2] = imageData.data[originalPixelIndex + 2];
       outputData.data[pixelIndex + 3] = imageData.data[originalPixelIndex + 3];
     }
-    drawOutputData();
   }
+  return
 }
 
-function drawOutputData() {
+function outputImage() {
+  console.log("outputImage");
   // put outputData in canvas
   outputCtx.putImageData(outputData, 0, 0);
 }
-
-function loop() {}
-
-function uddate() {}
-
-function output() {}
