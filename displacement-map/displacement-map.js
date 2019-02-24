@@ -37,6 +37,7 @@ function loadImages() {
   newImage.addEventListener("load", function () {
     mapImage.addEventListener("load", drawImages);
   });
+  // todo - better image preload
 }
 
 function drawImages() {
